@@ -34,42 +34,54 @@
     $data = mysqli_query($connect, "SELECT * FROM tb_user WHERE id='$ID'");
     while($row = mysqli_fetch_array($data)) {
     ?>
-    <form action="proses-tambah.php" method="post">
+    <form action="proses-edit.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
     <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Nama Lengkap</label>
+    <label for="namaLengkap" class="form-label">Nama Lengkap</label>
     <input type="text" class="form-control" name="nama_lengkap" value="<?php echo $row['nama_lengkap']; ?>">
     </div>
     <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Alamat</label>
+    <label for="alamat" class="form-label">Alamat</label>
     <input type="text" class="form-control" name="alamat" value="<?php echo $row['alamat']; ?>">
     </div>
     <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Telepon</label>
+    <label for="telepon" class="form-label">Telepon</label>
     <input type="number" class="form-control" name="telepon" value="<?php echo $row['telepon']; ?>">
     </div>
     <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email</label>
-    <input type="text" class="form-control" name="email" value="<?php echo $row['email']; ?>">
+    <label for="email" class="form-label">Email</label>
+    <input type="email" class="form-control" name="email" value="<?php echo $row['email']; ?>">
     </div>
     <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Password</label>
+    <label for="password" class="form-label">Password</label>
     <input type="password" class="form-control" name="password" value="<?php echo $row['password']; ?>">
     </div>
     <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Username</label>
+    <label for="username" class="form-label">Username</label>
     <input type="text" class="form-control" name="username" value="<?php echo $row['username']; ?>">
     </div>
     <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Otoritas</label>
+    <label for="otoritas" class="form-label">Otoritas</label>
     <select name="otoritas" class="form-control">
-                    <option value="0">Pilih otoritas</option>
-                    <option value="ADMIN" <?php if($row['otoritas'] == "MEMBER") echo 'selected="selected"'; ?>>ADMIN</option>
-                    <option value="MEMBER" <?php if($row['otoritas'] == "ADMIN") echo 'selected="selected"'; ?>>MEMBER</option>
+        <option value="0">Pilih otoritas</option>
+        <option value="ADMIN" <?php if($row['otoritas'] == "ADMIN") echo 'selected="selected"'; ?>>ADMIN</option>
+        <option value="MEMBER" <?php if($row['otoritas'] == "MEMBER") echo 'selected="selected"'; ?>>MEMBER</option>
     </select>
     </div>
+    <div class="mb-3">
+        <label for="currentImage" class="form-label">Gambar Saat Ini</label><br>
+        <?php if ($row['image']): ?>
+            <img src="../../uploaded_img/<?php echo $row['image'] ?>" alt="User Image" style="width: 100px; height: 100px; object-fit: cover;">
+        <?php else: ?>
+            <img src="../../uploads/default.png" alt="Default Image" style="width: 100px; height: 100px; object-fit: cover;">
+        <?php endif; ?>
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Gambar Baru</label>
+        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+    </div>
     <div class="d-grid gap-2">
-    <input type="submit" class="btn btn-primary btn-block" value="Simpan">
+        <input type="submit" class="btn btn-primary btn-block" value="Simpan">
     </div>
     </form>
     </div>

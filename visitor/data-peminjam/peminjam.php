@@ -30,6 +30,9 @@
                 <button class="btn btn-outline-warning">Logout</button>
                 </form>
             </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-success" href="../data-peminjam/cetak_laporan.php">Cetak PDF</a>
+            </li>
             </ul>
             <hr>
         </div>

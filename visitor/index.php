@@ -1,13 +1,3 @@
-<?php
-
-    // session_start();
-    // if(isset($_SESSION['username'])) {
-    //     // echo $_COOKIE['username'];
-    // } else {
-    //     header('location:../auth/login.php');
-    // }
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,11 +10,14 @@
     <script src="../scripts/bootstrap.min.js"></script>
     <script src="../scripts/jquery.min.js"></script>
 </head>
-<body> 
+<body>
     <div class="d-flex text-white title-app"><h1>Selamat Datang di Perpustakaan</h1></div>
     <div class="container-fluid h-100 w-100 text-center main-menu">
         <div>
-        <a href="buku-visitor/buku-visitor.php" class="bg-success text-white p4 ">Lihat Koleksi Buku</a>
+        <a href="buku-visitor/buku-visitor.php" class="bg-success text-white p4">Lihat Koleksi Buku</a>
+        </div>
+        <div>
+        <a href="profile.php" class="bg-success text-white p4">Profil</a>
         </div>
         <div>
         <form action="../auth/logout.php" method="post">

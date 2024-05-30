@@ -7,5 +7,5 @@ unset($_COOKIE['otortias']);
 unset($_COOKIE['alamat']);
 unset($_COOKIE['telepon']);
 unset($_COOKIE['nama_lengkap']);
-header('location:login.php');
+header('location:../index.php');
 ?>

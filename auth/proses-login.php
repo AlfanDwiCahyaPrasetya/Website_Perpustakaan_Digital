@@ -4,9 +4,17 @@ include "../config/connection.php";
 $email = $_POST["email"];
 $password = $_POST["password"];
 
+// Cek apakah email dan password sudah diisi
+if (empty($email) || empty($password)) {
+    echo "<script>alert('Email dan Password harus diisi!');</script>";
+    echo "<script>location='login.php';</script>";
+    exit();
+}
+
 $query = mysqli_query($connect,"SELECT * FROM tb_user WHERE email='$email' AND password='$password'");
 $row = mysqli_fetch_array($query);
-if($row['email'] == $email AND $row['password'] == $password) {
+
+if($row && $row['email'] == $email && $row['password'] == $password) {
     echo "<script>alert('Berhasil Login');</script>";
     session_start();
     $_SESSION['id'] = $row['id'];
@@ -35,10 +43,10 @@ if($row['email'] == $email AND $row['password'] == $password) {
     } else {
         header('location:../visitor/index.php');
     }
-    print_r($row);
+    exit();
 } else {
-    echo "<script>alert('Username atau Password Admin tidak benar !!!');</script>";
+    echo "<script>alert('Username atau Password tidak benar!');</script>";
     echo "<script>location='login.php';</script>";
+    exit();
 }
-
 ?>

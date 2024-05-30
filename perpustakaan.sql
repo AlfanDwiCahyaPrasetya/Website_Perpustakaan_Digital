@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jun 19, 2021 at 08:20 AM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 7.3.25
+-- Host: 127.0.0.1
+-- Generation Time: May 30, 2024 at 10:38 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,7 +35,7 @@ CREATE TABLE `tb_buku` (
   `penerbit` varchar(20) NOT NULL,
   `kategori` int(20) NOT NULL,
   `status` int(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tb_buku`
@@ -43,7 +43,9 @@ CREATE TABLE `tb_buku` (
 
 INSERT INTO `tb_buku` (`id`, `judul`, `pengarang`, `tahun_terbit`, `penerbit`, `kategori`, `status`) VALUES
 (10, 'Belajar PHP', 'AA', 2020, 'PT AA', 4, 1),
-(12, 'Belajar Design', 'Dg', 2018, 'PT Dg', 4, 3);
+(12, 'Belajar Design', 'Dg', 2018, 'PT Dg', 4, 3),
+(16, 'Sistem Informasi Man', 'Marsiman, S.Kom, M.K', 2020, 'CV. Laskar Indah', 4, 1),
+(17, 'Desain Grafis', 'raihan laisa', 2020, 'laisa club', 4, 1);
 
 -- --------------------------------------------------------
 
@@ -54,7 +56,7 @@ INSERT INTO `tb_buku` (`id`, `judul`, `pengarang`, `tahun_terbit`, `penerbit`, `
 CREATE TABLE `tb_kategori_buku` (
   `id` int(11) NOT NULL,
   `nama_kategori` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tb_kategori_buku`
@@ -81,7 +83,7 @@ CREATE TABLE `tb_pinjam` (
   `tgl_pinjam` date DEFAULT NULL,
   `tgl_kembali` date NOT NULL,
   `id_status` int(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tb_pinjam`
@@ -101,7 +103,7 @@ INSERT INTO `tb_pinjam` (`id`, `id_user`, `id_buku`, `tgl_pinjam`, `tgl_kembali`
 CREATE TABLE `tb_status` (
   `id` int(11) NOT NULL,
   `status` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tb_status`
@@ -127,17 +129,23 @@ CREATE TABLE `tb_user` (
   `otoritas` enum('MEMBER','ADMIN') NOT NULL,
   `nama_lengkap` varchar(50) NOT NULL,
   `alamat` text NOT NULL,
-  `telepon` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `telepon` varchar(50) NOT NULL,
+  `image` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tb_user`
 --
 
-INSERT INTO `tb_user` (`id`, `username`, `email`, `password`, `otoritas`, `nama_lengkap`, `alamat`, `telepon`) VALUES
-(3, 'afif', 'afif@gmail.com', 'afif', 'MEMBER', 'Afif', 'Pelemsari', '0812313123'),
-(6, 'admin', 'admin@gmail.com', 'admin', 'ADMIN', 'Admin Saja', 'test', '123123123'),
-(8, 'fadil', 'fadil@gmail.com', 'fadil', 'MEMBER', 'Fadil', 'Pelemsari', '08123123123');
+INSERT INTO `tb_user` (`id`, `username`, `email`, `password`, `otoritas`, `nama_lengkap`, `alamat`, `telepon`, `image`) VALUES
+(3, 'afif', 'afif@gmail.com', 'afaf', 'MEMBER', 'Afif', 'Pelemsari', '0812313123', 'ALFAN DWI CAHYA PRASETYA ( ALFAN ).jpeg'),
+(6, 'admin', 'admin@gmail.com', 'admin', 'ADMIN', 'Admin Saja', 'test', '123123123', ''),
+(16, 'Admin', 'admin@gmail.com', 'admin', 'ADMIN', 'Admin', '-', '0881036058125', 'ALFAN DWI CAHYA PRASETYA ( ALFAN ).jpeg'),
+(23, 'Admin', 'admin@gmail.com', 'admin', 'ADMIN', 'Admin', '-', '0881036058125', 'bg kecap.png'),
+(24, 'Alfan Dwi Cahya Pras', 'alfandwicahya07@gmai', 'qwertyu', 'MEMBER', 'Alfan Dwi Cahya Prasetya', 'Jl. Mahakam Indah Kav. 7', '0881036058125', 'Podcast.jpg'),
+(25, 'Admin', 'admin@gmail.com', 'qwertyu', 'ADMIN', 'Admin', '-', '0881036058125', 'Podcast.jpg'),
+(26, 'Admin', 'admin@gmail.com', 'admin', 'ADMIN', 'Admin', '-', '0881036058125', 'Podcast.jpg'),
+(27, 'Admin', 'admin@gmail.com', 'admin', 'ADMIN', 'Admin', '-', '0881036058125', 'ALFAN DWI CAHYA PRASETYA ( ALFAN ).jpeg');
 
 --
 -- Indexes for dumped tables
@@ -186,7 +194,7 @@ ALTER TABLE `tb_user`
 -- AUTO_INCREMENT for table `tb_buku`
 --
 ALTER TABLE `tb_buku`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `tb_kategori_buku`
@@ -198,7 +206,7 @@ ALTER TABLE `tb_kategori_buku`
 -- AUTO_INCREMENT for table `tb_pinjam`
 --
 ALTER TABLE `tb_pinjam`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `tb_status`
@@ -210,7 +218,7 @@ ALTER TABLE `tb_status`
 -- AUTO_INCREMENT for table `tb_user`
 --
 ALTER TABLE `tb_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- Constraints for dumped tables

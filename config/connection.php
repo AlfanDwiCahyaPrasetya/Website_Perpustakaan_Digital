@@ -6,11 +6,10 @@ $database = 'perpustakaan';
 
 $connect = mysqli_connect($serverName, $username, $password, $database);
 
-if ($connect -> connect_error) {
+if ($connect->connect_error) {
     die("Connection failed!: " . $connect->connect_error);
 }
 
-echo "<script>console.log('Connected Successfully')</script>";
-
-
+// Hapus atau komentari echo statement berikut
+// echo "<script>console.log('Connected Successfully')</script>";
 ?>

@@ -1,10 +1,10 @@
 <?php
 
-include '../../config/connection.php';
+include '../../koneksi.php';
 
-$id = $_GET['id'];
-mysqli_query($connect, "DELETE FROM tb_buku WHERE id='$id'");
+$ID = $_GET['id'];
+mysqli_query($connect, "DELETE FROM buku WHERE id='$ID'");
 
-header("location: buku.php");
+header("location: index.php");
 
 ?>

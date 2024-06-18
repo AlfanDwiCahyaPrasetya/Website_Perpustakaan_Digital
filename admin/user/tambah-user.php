@@ -1,73 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Perpustakaan</title>
-    <link rel="stylesheet" href="../../styles/bootstrap.min.css">
-    <link rel="stylesheet" href="../../styles/styles.css">
-    <script src="../../scripts/bootstrap.min.js"></script>
-    <script src="../../scripts/jquery.min.js"></script>
+    <title>Buat Akun</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../registrasi/registrasi.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 </head>
+
 <body>
-<div class="container-fluid bg-primary text-white p-3 text-center d-flex  justify-content-center fixed-top main-book">
-    <div class="title"><h1>Daftar Anggota Perpustakaan</h1></div>
-</div>
-<div class="container main-book">
-    <ul class="nav nav-pills mt-4">
-        <li class="nav-item">
-            <a class="nav-link" href="user.php">Kembali</a>
-        </li>
-        <li class="nav-item">
-            <form action="../../auth/logout.php" method="post">
-                <button class="btn btn-outline-warning">Logout</button>
+    <section class="first-section d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="back-button">
+            <a href="../">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <div class="input-box text-center">
+            <h2>Tambah Akun</h2>
+            <p></p>
+            <form action="proses-tambah-user.php" method="post" enctype="multipart/form-data">
+                <div class="input-group flex-nowrap mb-3">
+                    <span class="input-group-text" id="addon-wrapping">
+                        <img src="../../assets/profile.svg" alt="">
+                    </span>
+                    <input class="form-control" placeholder="Nama Lengkap" type="text" aria-label="Nama Lengkap" aria-describedby="addon-wrapping" name="nama_lengkap" required>
+                </div>
+                <div class="input-group flex-nowrap mb-3">
+                    <span class="input-group-text" id="addon-wrapping">
+                        <img src="../../assets/alamat.svg" alt="">
+                    </span>
+                    <input class="form-control" placeholder="Alamat" type="text" aria-label="Alamat" aria-describedby="addon-wrapping" name="alamat" required>
+                </div>
+                <div class="input-group flex-nowrap mb-3">
+                    <span class="input-group-text" id="addon-wrapping">
+                        <img src="../../assets/telepon.svg" alt="">
+                    </span>
+                    <input class="form-control" placeholder="Nomor Telepon" type="varchar" aria-label="Telepon" aria-describedby="addon-wrapping" name="telepon" required>
+                </div>
+                <div class="input-group flex-nowrap mb-3">
+                    <span class="input-group-text" id="addon-wrapping">
+                        <img src="../../assets/email.svg" alt="">
+                    </span>
+                    <input class="form-control" placeholder="Email" type="varchar" aria-label="Email" aria-describedby="addon-wrapping" name="email" required>
+                </div>
+                <div class="input-group flex-nowrap mb-3">
+                    <span class="input-group-text" id="addon-wrapping">
+                        <img src="../../assets/profile.svg" alt="">
+                    </span>
+                    <input class="form-control" placeholder="Username" type="text" aria-label="Username" aria-describedby="addon-wrapping" name="username" required>
+                </div>
+                <div class="input-group flex-nowrap mb-3">
+                    <span class="input-group-text" id="addon-wrapping">
+                        <img src="../../assets/password.svg" alt="">
+                    </span>
+                    <input class="form-control" placeholder="Password" type="password" aria-label="Password" aria-describedby="addon-wrapping" name="password" required>
+                </div>
+                <div class="input-group flex-nowrap">
+                        <span class="input-group-text" id="addon-wrapping">
+                            <img src="../../assets/profile.svg" alt="">
+                        </span>
+                        <select name="otoritas" class="form-select">
+                            <option value="ADMIN">Admin</option>
+                            <option value="MEMBER">Member</option>
+                        </select>
+                    </div>
+                <p></p>
+                <div class="input-group flex-nowrap mb-3">
+                    <button type="submit" name="submit" value="Sign Up" class="login-button">Buat Akun</button>
+                </div>
             </form>
-        </li>
-    </ul>
-    <hr>
-</div>
-<div class="container">
-    <form action="proses-tambah.php" method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="namaLengkap" class="form-label">Nama Lengkap</label>
-            <input type="text" class="form-control" id="namaLengkap" name="nama_lengkap" required>
         </div>
-        <div class="mb-3">
-            <label for="alamat" class="form-label">Alamat</label>
-            <input type="text" class="form-control" id="alamat" name="alamat" required>
-        </div>
-        <div class="mb-3">
-            <label for="telepon" class="form-label">Telepon</label>
-            <input type="number" class="form-control" id="telepon" name="telepon" required>
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" name="username" required>
-        </div>
-        <div class="mb-3">
-            <label for="otoritas" class="form-label">Otoritas</label>
-            <select id="otoritas" name="otoritas" class="form-control" required>
-                <option value="0">Pilih otoritas</option>
-                <option value="ADMIN">ADMIN</option>
-                <option value="MEMBER">MEMBER</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="image" class="form-label">Gambar</label>
-            <input type="file" class="form-control" id="image" name="image" accept="image/png,image/jpeg,image/jpg" required>
-        </div>
-        <div class="d-grid gap-2">
-            <input type="submit" class="btn btn-primary btn-block" value="Simpan">
-        </div>
-    </form>
-</div>
+    </section>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
+
 </html>

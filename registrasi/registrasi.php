@@ -69,14 +69,14 @@ require_once "../koneksi.php";
                 <div class="input-group flex-nowrap">
                     <input type="hidden" name="otoritas" value="MEMBER">
                 </div>
-                <p></p>
-                <div class="text">
-                    <p>Sudah mempunyai akun untuk masuk? <a href="../login/login.php">Masuk</a></p>
-                </div>
-                <div class="input-group flex-nowrap mb-3">
+                <br>
+                <div class="input-group flex-nowrap mb-4">
                     <button type="submit" name="submit" value="Sign Up" class="login-button">Buat Akun</button>
                 </div>
             </form>
+            <div class="text">
+                <p>Sudah mempunyai akun untuk masuk? <a href="../login/login.php">Masuk</a></p>
+            </div>
         </div>
     </section>
     <script src="script.js"></script>

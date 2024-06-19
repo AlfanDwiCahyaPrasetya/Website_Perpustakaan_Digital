@@ -3,9 +3,11 @@ session_start();
 include "../../koneksi.php";
 
 $userID = $_SESSION['id'];
-$query = "SELECT image FROM user WHERE id='$userID'";
+$query = "SELECT nama_lengkap, image FROM user WHERE id='$userID'";
 $result = mysqli_query($connect, $query);
 $row = mysqli_fetch_assoc($result);
+
+$nama_lengkap = $row['nama_lengkap'];
 $profilePicture = !empty($row['image']) ? "../../uploaded_img/" . $row['image'] : "../../assets/Default_Profile.png";
 
 
@@ -46,6 +48,7 @@ $total_pages = ceil($total_rows / $limit); // Menghitung jumlah total halaman
                 <a class="navbar-brand me-auto" href="../profile/index.php">
                     <img src="<?php echo $profilePicture; ?>" alt="" class="profile-picture">
                 </a>
+                <span class="full-name"><?php echo htmlspecialchars($nama_lengkap); ?></span>
                 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>

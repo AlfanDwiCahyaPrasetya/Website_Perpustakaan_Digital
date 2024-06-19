@@ -1,138 +1,95 @@
 <?php
+require_once "../../koneksi.php";
 require_once('../../tcpdf/tcpdf.php');
 
-class MYPDF extends TCPDF {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $selectedUsers = isset($_POST['selected_users']) ? $_POST['selected_users'] : '';
+    $query = "";
 
-    //Page header
-    public function Header() {
-        // Logo
-        $image_file = K_PATH_IMAGES.'Buku.png';
-        $this->Image($image_file, 10, 10, 15, '', 'jpg', '', 'T', false, 300, '', false, false, 0, false, false, false);
-        // Set font
-        $this->setFont('helvetica', 'B', 20);
-        
-        $this->Ln(10); // Add empty line with margin top (10)
-
-        // Title
-        $this->Cell(0, 15, 'Data Pengguna', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+    if (!empty($selectedUsers)) {
+        $ids = explode(',', $selectedUsers);
+        $ids = array_map('intval', $ids); // Sanitize the IDs to be integers
+        $query = "SELECT * FROM user WHERE id IN (" . implode(',', $ids) . ")";
+    } else {
+        $query = "SELECT * FROM user";
     }
 
-    // Page footer
-    public function Footer() {
-        // Position at 15 mm from bottom
-        $this->setY(-15);
+    $result = mysqli_query($connect, $query);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        // Create new PDF document with landscape orientation
+        $pdf = new TCPDF('L', PDF_UNIT, 'A4', true, 'UTF-8', false);
+
+        // Set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Your Name');
+        $pdf->SetTitle('Data Pengguna');
+        $pdf->SetSubject('TCPDF Tutorial');
+        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+        // Set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // Set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        // Set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        // Set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        // Add a page
+        $pdf->AddPage();
+
         // Set font
-        $this->setFont('helvetica', 'I', 8);
-        // Page number
-        $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        $pdf->SetFont('helvetica', '', 12);
+
+        // HTML content with table styles
+        $html = '<h2 style="text-align: center;">Data Pengguna</h2>';
+        $html .= '<table border="1" cellspacing="0" cellpadding="4">';
+        $html .= '<thead style="background-color:#f2f2f2;color:#000;">
+                    <tr>
+                        <th style="background-color:#d3d3d3;">No</th>
+                        <th style="background-color:#d3d3d3;">Nama Lengkap</th>
+                        <th style="background-color:#d3d3d3;">Alamat</th>
+                        <th style="background-color:#d3d3d3;">Telepon</th>
+                        <th style="background-color:#d3d3d3;">Username</th>
+                        <th style="background-color:#d3d3d3;">Password</th>
+                        <th style="background-color:#d3d3d3;">Email</th>
+                        <th style="background-color:#d3d3d3;">Otoritas</th>
+                        <th style="background-color:#d3d3d3;">Dibuat Pada</th>
+                    </tr>
+                  </thead>';
+        $html .= '<tbody>';
+        $no = 1;
+        while ($row = mysqli_fetch_assoc($result)) {
+            $html .= '<tr>';
+            $html .= '<td>' . $no++ . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['nama_lengkap']) . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['alamat']) . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['telepon']) . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['username']) . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['password']) . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['email']) . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['otoritas']) . '</td>';
+            $html .= '<td>' . date('d/m/Y H:i', strtotime($row['created_at'])) . '</td>';
+            $html .= '</tr>';
+        }
+        $html .= '</tbody>';
+        $html .= '</table>';
+
+        // Output the HTML content
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+        // Close and output PDF document
+        $pdf->Output('data_pengguna.pdf', 'I');
+    } else {
+        echo "No users found.";
     }
+} else {
+    echo "Invalid request method.";
 }
-
-// create new PDF document
-$pdf = new MYPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-// set document information
-$pdf->setCreator(PDF_CREATOR);
-$pdf->setAuthor('Kelompok 13');
-$pdf->setTitle('Data Pengguna');
-$pdf->setSubject('Data Pengguna');
-$pdf->setKeywords('TCPDF, PDF, example, test, guide');
-
-// set default header data
-$pdf->setHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
-
-// set header and footer fonts
-$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-// set default monospaced font
-$pdf->setDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-// set margins
-$pdf->setMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf->setHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->setFooterMargin(PDF_MARGIN_FOOTER);
-
-// set auto page breaks
-$pdf->setAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-// set image scale factor
-$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-// set some language-dependent strings (optional)
-if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-    require_once(dirname(__FILE__).'/lang/eng.php');
-    $pdf->setLanguageArray($l);
-}
-
-// ---------------------------------------------------------
-
-// set font
-$pdf->setFont('times', '', 12);
-
-// add a page
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'website_perpustakaan';
-$connect = mysqli_connect($host, $user, $password, $database);
-
-// Memeriksa koneksi
-if (!$connect) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
-// Membuat kueri SQL untuk mengambil data pengguna
-$query = "SELECT * FROM user";
-$result = mysqli_query($connect, $query);
-
-// Memeriksa hasil kueri
-if (!$result) {
-    die("Query failed: " . mysqli_error($connect));
-}
-
-// add a page
-$pdf->AddPage();
-
-// Membuat tabel untuk data pengguna
-$html = '<table border="1" cellpadding="5" cellspacing="0">
-            <thead>
-                <tr bgcolor="#0E46A3" color="#FFFFFF">
-                    <th>No</th>
-                    <th>Nama Lengkap</th>
-                    <th>Alamat</th>
-                    <th>Telepon</th>
-                    <th>Username</th>
-                    <th>Password</th>
-                    <th>Email</th>
-                    <th>Otoritas</th>
-                    <th>Dibuat Pada</th>
-                </tr>
-            </thead>
-            <tbody>';
-$rowNumber = 1;
-while ($row = mysqli_fetch_array($result)) {
-    $html .= '<tr>
-                <td>'.$rowNumber.'</td>
-                <td>'.$row['nama_lengkap'].'</td>
-                <td>'.$row['alamat'].'</td>
-                <td>'.$row['telepon'].'</td>
-                <td>'.$row['username'].'</td>
-                <td>'.$row['password'].'</td>
-                <td>'.$row['email'].'</td>
-                <td>'.$row['otoritas'].'</td>
-                <td>'.date('d/m/Y H:i', strtotime($row['created_at'])).'</td>
-            </tr>';
-    $rowNumber++;
-}
-$html .= '</tbody></table>';
-
-// Menambahkan tabel ke halaman PDF
-$pdf->writeHTML($html, true, false, true, false, '');
-
-// Menutup koneksi database
-mysqli_close($connect);
-
-// Menutup dokumen dan mengirim ke browser
-$pdf->Output('Data_Pengguna.pdf', 'I');
 ?>

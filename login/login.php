@@ -36,14 +36,15 @@ require_once "../koneksi.php";
                     </span>
                     <input class="form-control" placeholder="Password" type="password" aria-label="Password" aria-describedby="addon-wrapping" name="password" required>
                 </div>
-                <p></p>
-                <div class="text">
-                    <p>Belum mempunyai akun untuk masuk? <a href="../registrasi/registrasi.php">Registrasi</a></p>
-                </div>
-                <div class="input-group flex-nowrap mb-3">
+                <br>
+                <div class="input-group flex-nowrap mb-2">
                     <button type="submit" class="login-button">Masuk</button>
                 </div>
+                <br>
             </form>
+            <div class="text">
+                <p>Belum mempunyai akun untuk masuk? <a href="../registrasi/registrasi.php">Registrasi</a></p>
+            </div>
         </div>
     </section>
     <script src="script.js"></script>

@@ -48,7 +48,7 @@
     <section class="first-section" id="homesection">
       <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
         <h1>Selamat Datang!</h1>
-        <h2>Website Perpustakaan</h2>
+        <h2>Website Perpustakaan Digital</h2>
       </div>
     </section>
     <section class="second-section" id="aboutsection">
@@ -61,7 +61,7 @@
       </div>
     </section>
     <section class="third-section" id="contactsection">
-      <div class="container d-flex text-center align-items-center justify-content-center text-black flex-column">
+      <div class="container d-flex text-center align-items-center justify-content-center fs-1 text-black flex-column">
         <h2>Kontak</h2>
         <div class="row">
           <div class="col-md-4">

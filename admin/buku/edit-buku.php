@@ -58,6 +58,19 @@ require_once "../../koneksi.php";
                     </div>
                     <div class="input-group flex-nowrap mb-3">
                         <span class="input-group-text" id="addon-wrapping">
+                            <img src="../../assets/kategori.svg" alt="">
+                        </span>
+                        <select class="form-control" aria-label="Kategori" aria-describedby="addon-wrapping" name="kategori" required>
+                            <option value="" disabled selected>Pilih Kategori</option>
+                            <option value="Fiksi" <?php echo ($row['kategori'] == 'Fiksi') ? 'selected' : ''; ?>>Fiksi</option>
+                            <option value="Non-Fiksi" <?php echo ($row['kategori'] == 'Non-Fiksi') ? 'selected' : ''; ?>>Non-Fiksi</option>
+                            <option value="Anak-Anak" <?php echo ($row['kategori'] == 'Anak-Anak') ? 'selected' : ''; ?>>Anak-Anak</option>
+                            <option value="Edukasi" <?php echo ($row['kategori'] == 'Edukasi') ? 'selected' : ''; ?>>Edukasi</option>
+                            <option value="Hobi" <?php echo ($row['kategori'] == 'Hobi') ? 'selected' : ''; ?>>Hobi</option>
+                        </select>
+                    </div>
+                    <div class="input-group flex-nowrap mb-3">
+                        <span class="input-group-text" id="addon-wrapping">
                             <img src="../../assets/pdf.svg" alt="">
                         </span>
                         <input class="form-control" placeholder="Upload File" type="file" aria-label="File" aria-describedby="addon-wrapping" name="file" value="<?php echo $row['file']; ?>">
@@ -69,7 +82,7 @@ require_once "../../koneksi.php";
                         <input class="form-control" placeholder="Upload Image" type="file" aria-label="Image" aria-describedby="addon-wrapping" name="image" value="<?php echo $row['image']; ?>">
                     </div>
                     <div class="input-group flex-nowrap mb-3">
-                        <button type="submit" name="submit" value="Ubah Buku" class="login-button">Tambah Buku</button>
+                        <button type="submit" name="submit" value="Ubah Buku" class="login-button">Ubah Edit Buku</button>
                     </div>
                 </form>
         </div>

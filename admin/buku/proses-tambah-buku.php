@@ -6,6 +6,7 @@ if (isset($_POST['submit'])) {
     $penulis = $_POST['penulis'];
     $penerbit = $_POST['penerbit'];
     $tahun_terbit = $_POST['tahun_terbit'];
+    $kategori = $_POST['kategori']; // Kategori yang dipilih
     $file = $_FILES['file']['name'];
     $image = $_FILES['image']['name'];
 
@@ -20,8 +21,8 @@ if (isset($_POST['submit'])) {
     move_uploaded_file($_FILES["image"]["tmp_name"], $target_image);
 
     // SQL Query
-    $query = "INSERT INTO buku (judul_buku, penulis, penerbit, tahun_terbit, file, image, created_at) 
-              VALUES ('$judul_buku', '$penulis', '$penerbit', '$tahun_terbit', '$file', '$image', CURRENT_TIMESTAMP)";
+    $query = "INSERT INTO buku (judul_buku, penulis, penerbit, tahun_terbit, kategori, file, image, created_at) 
+              VALUES ('$judul_buku', '$penulis', '$penerbit', '$tahun_terbit', '$kategori', '$file', '$image', CURRENT_TIMESTAMP)";
 
     if (mysqli_query($connect, $query)) {
         header("Location: index.php");

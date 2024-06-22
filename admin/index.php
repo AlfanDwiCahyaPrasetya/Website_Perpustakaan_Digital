@@ -16,18 +16,6 @@ $row = mysqli_fetch_assoc($result);
 $nama_lengkap = $row['nama_lengkap'];
 $profilePicture = !empty($row['image']) ? "../uploaded_img/" . $row['image'] : "../assets/Default_Profile.png";
 
-// Fetch user counts by month and authority
-$monthQuery = "
-    SELECT DATE_FORMAT(created_at, '%M/%Y') as month, otoritas, COUNT(*) as count 
-    FROM user 
-    GROUP BY month, otoritas
-";
-$monthResult = mysqli_query($connect, $monthQuery);
-$monthlyData = [];
-while ($row = mysqli_fetch_assoc($monthResult)) {
-    $monthlyData[] = $row;
-}
-
 // Fetch distinct years for dropdown
 $distinctYearsQuery = "
     SELECT DISTINCT DATE_FORMAT(created_at, '%Y') as year
@@ -40,6 +28,22 @@ while ($row = mysqli_fetch_assoc($distinctYearsResult)) {
     $years[] = $row['year'];
 }
 
+// Fetch user counts by year and authority
+function fetchUserCountsByYear($connect, $year)
+{
+    $yearQuery = "
+        SELECT otoritas, COUNT(*) as count 
+        FROM user 
+        WHERE YEAR(created_at) = '$year'
+        GROUP BY otoritas
+    ";
+    $yearResult = mysqli_query($connect, $yearQuery);
+    $yearlyData = [];
+    while ($row = mysqli_fetch_assoc($yearResult)) {
+        $yearlyData[] = $row;
+    }
+    return $yearlyData;
+}
 ?>
 
 <!DOCTYPE html>
@@ -93,90 +97,154 @@ while ($row = mysqli_fetch_assoc($distinctYearsResult)) {
         </nav>
     </header>
 
-    <section class="first-section d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-        <div class="container-fixed-width">
-            <div class="input-box">
-                <div class="d-flex">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonYear" data-bs-toggle="dropdown" aria-expanded="false">
-                            Pilih Tahun
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonYear">
-                            <?php foreach ($years as $year) : ?>
-                                <a href="#" id="<?php echo $year; ?>" class="dropdown-item year-item"><?php echo $year; ?></a>
-                            <?php endforeach; ?>
-                        </ul>
+    <section class="first-section d-flex justify-content-center align-items-center">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="input-box">
+                        <div class="d-flex">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonYear" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Pilih Tahun
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonYear">
+                                    <?php foreach ($years as $year) : ?>
+                                        <li><a href="#" id="<?php echo $year; ?>" class="dropdown-item year-item"><?php echo $year; ?></a></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        </div>
+                        <canvas id="userChart" style="max-height: 500px;"></canvas>
                     </div>
                 </div>
-                    <canvas id="userChart" style="max-height: 500px;"></canvas>
+                <div class="col-md-4">
+                    <div class="input-box">
+                        <!-- <div class="info-box bg-light p-3 mb-3"> -->
+                            <h5 class="info-box-title">Admin</h5>
+                            <p id="adminCount">Jumlah : 0</p>
+                        <!-- </div> -->
+                    </div>
+                    <div class="input-box">
+                        <!-- <div class="info-box bg-light p-3 mb-3"> -->
+                            <h5 class="info-box-title">Member</h5>
+                            <p id="memberCount">Jumlah : 0</p>
+                        <!-- </div> -->
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
-
     <script>
-    const monthlyData = <?php echo json_encode($monthlyData); ?>;
-    const distinctYears = <?php echo json_encode($years); ?>;
+        const currentYear = new Date().getFullYear().toString(); // Ambil tahun saat ini dalam format string
+        const distinctYears = <?php echo json_encode($years); ?>;
 
-    function filterDataByYear(data, year) {
-        return data.filter(item => item.month.startsWith(year));
-    }
+        async function fetchData(year) {
+            const response = await fetch(`fetch_user_data.php?year=${year}`);
+            const data = await response.json();
+            return data;
+        }
 
-    function formatData(data) {
-        const admins = data.filter(item => item.otoritas === 'ADMIN');
-        const members = data.filter(item => item.otoritas === 'MEMBER');
-        const labels = [...new Set(data.map(item => item.month))];
+        function updateInfoBoxes(data) {
+            const adminCount = data.filter(item => item.otoritas === 'ADMIN').reduce((acc, curr) => acc + curr.count, 0);
+            const memberCount = data.filter(item => item.otoritas === 'MEMBER').reduce((acc, curr) => acc + curr.count, 0);
 
-        return {
-            labels: labels,
-            datasets: [{
-                    label: 'Admin',
-                    data: labels.map(l => (admins.find(a => a.month === l) || {}).count || 0),
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+            document.getElementById('adminCount').textContent = `Jumlah: ${adminCount}`;
+            document.getElementById('memberCount').textContent = `Jumlah: ${memberCount}`;
+        }
+
+        function formatData(data) {
+            const admins = data.filter(item => item.otoritas === 'ADMIN');
+            const members = data.filter(item => item.otoritas === 'MEMBER');
+            const totalAdmins = admins.reduce((acc, curr) => acc + curr.count, 0);
+            const totalMembers = members.reduce((acc, curr) => acc + curr.count, 0);
+
+            return {
+                labels: ['Admin', 'Member'],
+                datasets: [{
+                    data: [totalAdmins, totalMembers],
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                    borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
                     borderWidth: 1
-                },
-                {
-                    label: 'Member',
-                    data: labels.map(l => (members.find(m => m.month === l) || {}).count || 0),
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }
-            ]
-        };
-    }
+                }]
+            };
+        }
 
-    var ctx = document.getElementById('userChart').getContext('2d');
-    var userChart = new Chart(ctx, {
-        type: 'bar',
-        data: formatData(monthlyData),
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+        var ctx = document.getElementById('userChart').getContext('2d');
+        var userChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Admin', 'Member'],
+                datasets: [{
+                    data: [0, 0],
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                    borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            padding: 20 // Tambahkan padding antara label dan chart
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed;
+                                }
+                                return label;
+                            }
+                        }
+                    }
                 }
             }
-        }
-    });
-
-    function updateChart(chart, data) {
-        chart.data = formatData(data);
-        chart.update();
-    }
-
-    document.querySelectorAll('.year-item').forEach(item => {
-        item.addEventListener('click', event => {
-            const year = event.target.textContent;
-
-            // Update the dropdown button text
-            document.getElementById('dropdownMenuButtonYear').innerText = `Tahun ${year}`;
-
-            // Update the dropdown button color
-            document.getElementById('dropdownMenuButtonYear').classList.remove('btn-secondary');
-            document.getElementById('dropdownMenuButtonYear').classList.add('btn-success');
         });
-    });
-</script>
+
+        function updateChart(chart, data) {
+            chart.data = formatData(data);
+            chart.update();
+        }
+
+        // Update the chart with current year data when the page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (distinctYears.includes(currentYear)) {
+                document.getElementById('dropdownMenuButtonYear').innerText = `Tahun ${currentYear}`;
+                document.getElementById('dropdownMenuButtonYear').classList.remove('btn-secondary');
+                document.getElementById('dropdownMenuButtonYear').classList.add('btn-success');
+
+                const initialData = await fetchData(currentYear);
+                updateChart(userChart, initialData);
+                updateInfoBoxes(initialData);
+            }
+        });
+
+        document.querySelectorAll('.year-item').forEach(item => {
+            item.addEventListener('click', async event => {
+                const year = event.target.textContent;
+
+                // Update the dropdown button text
+                document.getElementById('dropdownMenuButtonYear').innerText = `Tahun ${year}`;
+
+                // Update the dropdown button color
+                document.getElementById('dropdownMenuButtonYear').classList.remove('btn-secondary');
+                document.getElementById('dropdownMenuButtonYear').classList.add('btn-success');
+
+                // Fetch and update the chart with the filtered data
+                const filteredData = await fetchData(year);
+                updateChart(userChart, filteredData);
+                updateInfoBoxes(filteredData);
+            });
+        });
+    </script>
 </body>
 
 </html>

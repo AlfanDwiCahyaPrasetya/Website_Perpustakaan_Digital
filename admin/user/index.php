@@ -12,7 +12,7 @@ $nama_lengkap = $row['nama_lengkap'];
 $profilePicture = !empty($row['image']) ? "../../uploaded_img/" . $row['image'] : "../../assets/Default_Profile.png";
 
 // Konfigurasi pagination
-$limit = 7; // Jumlah baris per halaman
+$limit = 8; // Jumlah baris per halaman
 $page = isset($_GET['page']) ? $_GET['page'] : 1; // Halaman saat ini
 $start = ($page - 1) * $limit; // Titik mulai data
 

@@ -7,6 +7,7 @@ $judul_buku = $_POST['judul_buku'];
 $penulis = $_POST['penulis'];
 $penerbit = $_POST['penerbit'];
 $tahun_terbit = $_POST['tahun_terbit'];
+$kategori = $_POST['kategori'];
 
 // Check if a new file is uploaded
 if ($_FILES['file']['name']) {
@@ -32,7 +33,7 @@ if ($_FILES['image']['name']) {
 
 $result = mysqli_query($connect, "UPDATE buku SET 
     judul_buku='$judul_buku', penulis='$penulis', penerbit='$penerbit', tahun_terbit='$tahun_terbit', 
-    file='$file', image='$image'
+    kategori='$kategori', file='$file', image='$image'
     WHERE id='$id'");
 
 if ($result) {

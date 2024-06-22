@@ -3,6 +3,7 @@ require_once "../../koneksi.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@ require_once "../../koneksi.php";
     <link rel="stylesheet" href="../../login/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 </head>
+
 <body>
     <section class="first-section d-flex justify-content-center align-items-center" style="min-height: 100vh;">
         <div class="back-button">
@@ -48,6 +50,19 @@ require_once "../../koneksi.php";
                 </div>
                 <div class="input-group flex-nowrap mb-3">
                     <span class="input-group-text" id="addon-wrapping">
+                        <img src="../../assets/kategori.svg" alt="">
+                    </span>
+                    <select class="form-control" aria-label="Tahun Terbit" aria-describedby="addon-wrapping" name="tahun_terbit" required>
+                        <option value="" disabled selected>Pilih Kategori</option>
+                        <option value="ktg0">Fiksi</option>
+                        <option value="ktg1">Non-Fiksi</option>
+                        <option value="ktg2">Anak-Anak</option>
+                        <option value="ktg3">Edukasi</option>
+                        <option value="ktg4">Hobi</option>
+                    </select>
+                </div>
+                <div class="input-group flex-nowrap mb-3">
+                    <span class="input-group-text" id="addon-wrapping">
                         <img src="../../assets/pdf.svg" alt="">
                     </span>
                     <input class="form-control" placeholder="Upload File" type="file" aria-label="File" aria-describedby="addon-wrapping" name="file" required>
@@ -66,4 +81,5 @@ require_once "../../koneksi.php";
     </section>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
+
 </html>

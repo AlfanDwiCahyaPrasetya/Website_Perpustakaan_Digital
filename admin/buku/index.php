@@ -10,7 +10,6 @@ $row = mysqli_fetch_assoc($result);
 $nama_lengkap = $row['nama_lengkap'];
 $profilePicture = !empty($row['image']) ? "../../uploaded_img/" . $row['image'] : "../../assets/Default_Profile.png";
 
-
 // Konfigurasi pagination
 $limit = 4; // Jumlah baris per halaman
 $page = isset($_GET['page']) ? $_GET['page'] : 1; // Halaman saat ini
@@ -103,6 +102,7 @@ $total_pages = ceil($total_rows / $limit); // Menghitung jumlah total halaman
                             <th scope="col">Penulis</th>
                             <th scope="col">Penerbit</th>
                             <th scope="col">Tahun Terbit</th>
+                            <th scope="col">Kategori</th>
                             <th scope="col">File</th>
                             <th scope="col">Image</th>
                             <th scope="col">Di Input Pada</th>
@@ -115,12 +115,13 @@ $total_pages = ceil($total_rows / $limit); // Menghitung jumlah total halaman
                     ?>
                         <tr>
                             <td><?php echo $rowNumber++ ?></td>
-                            <td><?php echo $row['judul_buku'] ?></td>
-                            <td><?php echo $row['penulis'] ?></td>
-                            <td><?php echo $row['penerbit'] ?></td>
-                            <td><?php echo $row['tahun_terbit'] ?></td>
-                            <td><a href="../../uploaded_file/<?php echo $row['file']; ?>"><?php echo $row['file']; ?></a></td>
-                            <td><img src="../../uploaded_img/<?php echo $row['image']; ?>" alt="image" width="50"></td>
+                            <td><?php echo htmlspecialchars($row['judul_buku']); ?></td>
+                            <td><?php echo htmlspecialchars($row['penulis']); ?></td>
+                            <td><?php echo htmlspecialchars($row['penerbit']); ?></td>
+                            <td><?php echo htmlspecialchars($row['tahun_terbit']); ?></td>
+                            <td><?php echo htmlspecialchars($row['kategori']); ?></td>
+                            <td><a href="../../uploaded_file/<?php echo htmlspecialchars($row['file']); ?>"><?php echo htmlspecialchars($row['file']); ?></a></td>
+                            <td><img src="../../uploaded_img/<?php echo htmlspecialchars($row['image']); ?>" alt="image" width="50"></td>
                             <td><?php echo date('d/m/Y H:i', strtotime($row['created_at'])); ?></td>
                             <td>
                                 <div class="action-buttons">
